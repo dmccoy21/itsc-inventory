@@ -1,0 +1,135 @@
+{% extends "base.html" %} {% block title %}Sign Up{% endblock %} {% block content %}
+
+<form method="POST">
+
+  <h1 align="center">Sign Up</h1>
+
+  <div class="form-group">
+
+    <label for="first_name">First Name:</label>
+
+    <input
+      type="text"
+      class="form-control"
+      id="first_name"
+      name="first_name"
+      placeholder="John"
+    />
+
+  </div>
+
+  <div class="form-group">
+
+    <label for="last_name">Last Name:</label>
+
+    <input
+      type="text"
+      class="form-control"
+      id="last_name"
+      name="last_name"
+      placeholder="Apple"
+    />
+
+  </div>
+
+  <div class="form-group">
+
+    <label for="email">Email Address:</label>
+
+    <input
+      type="email"
+      class="form-control"
+      id="email"
+      name="email"
+      placeholder="ex: j.appleseed@email.msmary.edu"
+    />
+
+  </div>
+
+  <div class="form-group">
+
+    <label for="password1">Password:</label>
+
+    <input
+      type="password"
+      class="form-control"
+      id="password1"
+      name="password1"
+      placeholder="At least 5 characters"
+    />
+
+  </div>
+
+  <div class="form-group">
+
+    <label for="password2">Confirm Password:</label>
+
+    <input
+      type="password"
+      class="form-control"
+      id="password2"
+      name="password2"
+      placeholder="Confirm Password"
+    />
+
+  </div>
+
+  <div class="form-group">
+
+    Department: <select name="department">
+
+      <option hidden="">Select Department</option>
+
+      <option value="STUDENT">STUDENT</option>
+
+      <option value="ACCT">ACCT</option>
+
+      <option value="HIST">HIST</option>
+
+      <option value="ART">ART</option>
+
+      <option value="BIOL">BIOL</option>
+
+      <option value="BUS">BUS</option>
+
+      <option value="CHEM">CHEM</option>
+
+      <option value="CJUST">CJUST</option>
+
+      <option value="CMSCI">CMSCI</option>
+
+      <option value="COMM">COMM</option>
+
+      <option value="CYBER">CYBER</option>
+
+      <option value="ECON">ECON</option>
+
+      <option value="MATH">MATH</option>
+
+      <option value="FL">FL</option>
+
+      <option value="FSYM">FSYM</option>
+
+      <option value="PHIL">PHIL</option>
+
+      <option value="WCIV">WCIV</option>
+
+      <option value="MANAGER">MANAGER</option>
+
+      <option value="ITSC">ITSC</option>
+
+    </select>
+
+  </div>
+
+  <br />
+
+  <center><button type="submit" class="btn btn-primary">Submit</button></center>
+
+</form>
+
+</div>
+
+<br />
+
+{% endblock %}

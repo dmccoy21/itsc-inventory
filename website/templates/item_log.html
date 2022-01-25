@@ -1,0 +1,102 @@
+{% extends "base.html" %} {% block title %}Item Registry{% endblock %} {% block content %}
+
+<form method="POST" align="center">
+
+  <br />
+
+  <h1 align="center">Item Registration</h1>
+
+  <br />
+
+  <div class="form-group">
+
+    TYPE:
+    <select name="item_type">
+
+    <option hidden="">Select Type</option>
+
+    <option value="Adapter">Adapter</option>
+
+    <option value="Laptop">Laptop</option>
+
+    <option value="EIKI_Projector">EIKI_Projector</option>
+
+    <option value="Camera">Camera</option>
+
+    <option value="Power_Supply">Power_Supply</option>
+
+    <option value="TEAC_Amplifier">TEAC_Amplifier</option>
+
+    <option value="Panasonic_DVD_Player">Panasonic_DVD_Player</option>
+
+    <option value="Panasonic_Remote">Panasonic_Remote</option>
+
+    <option value="MG_Speaker">MG_Speaker</option>
+
+    <option value="Sylvania_DVD_Player">Sylvania_DVD_Player</option>
+
+    </select>
+
+  </div>
+
+  <br />
+
+  <div class="form-group">
+
+  ITEM:
+  <select name="item_name">
+
+    <option hidden="">Select Item</option>
+
+    <option value="USB-C_to_HDMI/VGA">USB-C_to_HDMI/VGA</option>
+
+    <option value="VGA_to_HDMI">VGA_to_HDMI</option>
+
+    <option value="VGA_to_DisplayPort">VGA_to_DisplayPort</option>
+
+    <option value="Mac_to_VGA">Mac_to_VGA</option>
+
+    <option value="Mac_to_HDMI">Mac_to_HDMI</option>
+
+    <option value="VGA_to_iPad/iPhone">VGA_to_iPad/iPhone</option>
+
+    <option value="Loaner_Laptop">Loaner_Laptop</option>
+
+    <option value="Document_Camera">Document_Camera</option>
+
+    <option value="LCDP">LCDP</option>
+
+    <option value="AMP">AMP</option>
+
+    <option value="DVD/VCR">DVD_VCR</option>
+
+    <option value="DVD/VHS">DVD/VHS</option>
+
+    <option value="DVDR">DVDR</option>
+
+    <option value="SPK_A">SPK_A</option>
+
+    <option value="SPK_B">SPK_B</option>
+
+    <option value="AMP">AMP</option>
+
+  </select>
+
+  </div>
+
+  <br />
+
+  <div class="form-group">
+
+    ITEM #:
+    <input name="item_number" type="number" min="1" placeholder="Enter Item Number"/>
+
+  </div>
+
+  <br />
+
+  <button type="submit" class="btn btn-primary">Submit</button>
+
+</form>
+
+{% endblock %}

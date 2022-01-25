@@ -1,0 +1,195 @@
+{% extends "base.html" %} {% block title %}Equipment Log v2{% endblock %} {% block content %}
+
+<h2 align="center">Equipment Log v2</h2>
+
+<hr />
+
+<h3 align="center">*Signed Out Equipment*</h3>
+
+{% for data in out %}
+
+<li class="list-group-item">
+
+    <div>
+      {{ data.item_name }} - {% if data.item_number < 10 %}0{% endif %}{{ data.item_number }} | Time Out: {{ data.dateOut }} | Assignee:
+
+        {% for user in users %}
+
+            {% if user.email == data.user_email %}
+
+                {{ user.first_name }} {{ user.last_name }}
+
+            {% endif %}
+
+        {% endfor %}
+
+        | <a href="mailto: {{data.user_email}}?subject=ITSC Notice TEST&body=This is a notice from Mount St. Mary's University
+        Information Technology Student Center."><u>{{ data.user_email }}</u></a>
+
+
+        {% if current_user.department == 'MANAGER' %}
+
+        <button type="button" class="close" onClick="signIn({{ data.id }})">
+        <span aria-hidden="true">&times;</span>
+        </button>
+
+      {% endif %}
+
+    </div>
+
+    </li>
+
+<br />
+
+{% endfor %}
+
+<hr />
+
+<h3 align="center">*Available Equipment*</h3>
+
+<ul class="list-group list-group-flush" id="inventory">
+
+{% for data in available %}
+
+    <li class="list-group-item">
+
+    <div>
+        Item ID: {{ data.id }} | {{ data.item_name }} - {% if data.item_number < 10 %}0{% endif %}{{ data.item_number }}
+        | Time In: {{ data.dateIn }}
+
+        {% if current_user.department == 'MANAGER' %}
+
+        <button type="button" class="close" onClick="signOut({{ data.id }})">
+        <span aria-hidden="true">&times;</span>
+        </button>
+
+      {% endif %}
+
+    </div>
+
+    </li>
+
+    <br />
+
+{% endfor %}
+
+</ul>
+
+<hr />
+
+<h3 align="center">*Request Form*</h3>
+
+<br />
+
+<form method="POST" align="center">
+
+    <div>
+
+        TYPE: <select name="item_type">
+
+            <option hidden="">Select Type</option>
+
+            <option value="Adapter">Adapter</option>
+
+            <option value="Laptop">Laptop</option>
+
+            <option value="EIKI_Projector">EIKI_Projector</option>
+
+            <option value="Camera">Camera</option>
+
+            <option value="Power_Supply">Power_Supply</option>
+
+            <option value="TEAC_Amplifier">TEAC_Amplifier</option>
+
+            <option value="Panasonic_DVD_Player">Panasonic_DVD_Player</option>
+
+            <option value="Panasonic_Remote">Panasonic_Remote</option>
+
+            <option value="MG_Speaker">MG_Speaker</option>
+
+            <option value="Sylvania_DVD_Player">Sylvania_DVD_Player</option>
+
+        </select>
+
+        ITEM ID: <select name="item_id">
+
+            <option hidden="">Select ID #</option>
+
+            {% for data in available %}
+
+            <option value={{data.id}}>{{ data.id }}</option>
+
+            {% endfor %}
+
+        </select>
+
+         | ITEM: <select name="item_name">
+
+            <option hidden="">Select Item</option>
+
+            <option value="USB-C_to_HDMI/VGA">USB-C_to_HDMI/VGA</option>
+
+            <option value="VGA_to_HDMI">VGA_to_HDMI</option>
+
+            <option value="VGA_to_DisplayPort">VGA_to_DisplayPort</option>
+
+            <option value="Mac_to_VGA">Mac_to_VGA</option>
+
+            <option value="Mac_to_HDMI">Mac_to_HDMI</option>
+
+            <option value="VGA_to_iPad/iPhone">VGA_to_iPad/iPhone</option>
+
+            <option value="Loaner_Laptop">Loaner_Laptop</option>
+
+            <option value="Document_Camera">Document_Camera</option>
+
+            <option value="LCDP">LCDP</option>
+
+            <option value="AMP">AMP</option>
+
+            <option value="DVD/VCR">DVD_VCR</option>
+
+            <option value="DVD/VHS">DVD/VHS</option>
+
+            <option value="DVDR">DVDR</option>
+
+            <option value="SPK_A">SPK_A</option>
+
+            <option value="SPK_B">SPK_B</option>
+
+            <option value="AMP">AMP</option>
+
+        </select>
+
+
+         - <input name="item_number" type="number" min="1" max="100000" placeholder="Item #"/>
+
+
+          | REQUESTER: <select name="email">
+
+            <option hidden="">Requester</option>
+
+            {% for user in users %}
+
+            <option value={{user.email}}>{{ user.email }}</option>
+
+            {% endfor %}
+
+        </select>
+
+        <br />
+        <br />
+
+        <div align="center">
+            <button type="submit" class="btn btn-primary" onClick="">Check Out</button>
+        </div>
+
+    </div>
+
+</form>
+
+<br />
+<br />
+<br />
+
+{% endblock %}

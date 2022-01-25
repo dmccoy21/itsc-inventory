@@ -1,0 +1,94 @@
+{% extends "base.html" %} {% block title %}Home{% endblock %} {% block content %}
+
+<h2><u>Account Information:</u></h2>
+
+{% if user.department != "ITSC" and user.department != "MANAGER" %}
+
+<p>User: {{ user.first_name }} {{ user.last_name}}</p>
+<p>E-mail: {{ user.email }}</p>
+<p>Department: {{ user.department }} | ID #68679{{ user.id }}</p>
+
+<hr />
+
+{% else %}
+
+<p>Technician: {{ user.first_name }} {{ user.last_name}} | Role: {{ user.department }}</p>
+<p>E-mail: {{ user.email }}</p>
+<p>ID #474445{{ user.id }}</p>
+
+<hr />
+
+{% endif %}
+
+{% if user.department != "ITSC" and user.department != "MANAGER" %}
+
+<h1 align="center">* Submit A Ticket *</h1>
+
+<form method="POST">
+
+  <textarea name="ticket" id="ticket" class="form-control"></textarea>
+
+  <br />
+
+  <div align="center">
+    <button type="submit" class="btn btn-primary">Add Ticket</button>
+  </div>
+
+  <br />
+
+  <hr />
+
+  <h1 align="center">* Ticket History *</h1>
+
+  <ul class="list-group list-group-flush" id="tickets">
+
+    {% for ticket in user.tickets %}
+
+    <li class="list-group-item">
+
+      Ticket #2021{{ user.id }}{{ ticket.id }} | {{ ticket.data }} | DATE: {{ ticket.date }}
+
+      <button type="button" class="close" onClick="deleteTicket({{ ticket.id }})">
+      <span aria-hidden="true">&times;</span>
+      </button>
+
+  </li>
+
+  {% endfor %}
+
+  </ul>
+
+</form>
+
+{% else %}
+
+<h2 align="center">Current Tickets:</h2>
+
+{% for data in tickets %}
+
+<li class="list-group-item">
+
+  {% for user in users %}{% if user.id == data.user_id %}<b>{{ user.first_name }} {{ user.last_name }} </b> |
+
+  <a href="mailto: {{user.email}}?subject=ITSC Notice TEST&body=This is a notice from Mount St. Mary's University Information Technology Student Center.">
+    <u>{{user.email}}</u></a>{% endif %}{% endfor %} <br />
+  <b>User ID#:</b> {{ data.user_id }} <br />
+  <b>Ticket:</b> {{ data.id }} | Date: {{ data.date }} <br /><hr />
+  <b>Issue:</b>
+  {{ data.data }}
+
+  <button type="button" class="close" onClick="deleteTicket({{ data.id }})">
+      <span aria-hidden="true">&times;</span>
+    </button>
+
+</li>
+
+<br />
+
+<br />
+
+{% endfor %}
+
+{% endif %}
+
+{% endblock %}
