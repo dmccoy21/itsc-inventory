@@ -1,6 +1,6 @@
 {% extends "base.html" %} {% block title %}Equipment Log v2{% endblock %} {% block content %}
 
-<h2 align="center">Equipment Log v2</h2>
+<h2 align="center" xmlns="http://www.w3.org/1999/html">Equipment Log v2</h2>
 
 <hr />
 
@@ -26,6 +26,7 @@
         | <a href="mailto: {{data.user_email}}?subject=ITSC Notice TEST&body=This is a notice from Mount St. Mary's University
         Information Technology Student Center."><u>{{ data.user_email }}</u></a>
 
+        | Return Time: {{ data.returnDate }}
 
         {% if current_user.department == 'MANAGER' %}
 
@@ -176,6 +177,14 @@
             {% endfor %}
 
         </select>
+
+        <br />
+        <br />
+
+        <div>
+            <label>Select Return Data:</label>
+            <input type="datetime-local" id="event-date" name="event-date" min="2022-01-01T08:00" max="2022-05-13T22:00" required>
+        </div>
 
         <br />
         <br />

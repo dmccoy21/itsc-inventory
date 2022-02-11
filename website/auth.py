@@ -3,6 +3,7 @@ from .models import User, InventoryIn, InventoryOut
 from werkzeug.security import generate_password_hash, check_password_hash
 from . import db
 from flask_login import login_user, login_required, logout_user, current_user
+from datetime import datetime
 
 
 auth = Blueprint('auth', __name__)
@@ -149,10 +150,17 @@ def view_inventory():
             item_name = request.form.get('item_name')
             item_number = request.form.get('item_number')
             email = request.form.get('email')
+            returnDate = request.form.get('event-date')
+
+            process_date = returnDate.replace('T', '-').replace(':', '-').split('-')
+            process_date = [int(v) for v in process_date]
+            returnDate = datetime(*process_date)
+
             equipment_out = InventoryOut(item_name=item_name,
                                          item_type=item_type,
                                          item_number=item_number,
-                                         user_email=email)
+                                         user_email=email,
+                                         returnDate=returnDate)
             db.session.add(equipment_out)
             item_id = request.form.get('item_id')
             switch = InventoryIn.query.get(int(item_id))

@@ -1,6 +1,7 @@
 from . import db
 from flask_login import UserMixin
 from sqlalchemy.sql import func
+from datetime import datetime
 
 
 class InventoryIn(db.Model):
@@ -18,6 +19,7 @@ class InventoryOut(db.Model):
     item_number = db.Column(db.Integer)
     dateOut = db.Column(db.DateTime(timezone=True), default=func.now())
     user_email = db.Column(db.String(150))
+    returnDate = db.Column(db.DateTime, index=True, default=datetime.utcnow())
 
 
 class Ticket(db.Model):
