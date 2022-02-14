@@ -46,7 +46,9 @@
 
     <li class="list-group-item">
 
-      Ticket #2021{{ user.id }}{{ ticket.id }} | {{ ticket.data }} | DATE: {{ ticket.date }}
+      Ticket #2021{{ user.id }}{{ ticket.id }}<br />
+      DATE: {{ ticket.date.strftime('%A, %B %d at %I:%M %p ') }}<br />
+      {{ ticket.data }}
 
       <button type="button" class="close" onClick="deleteTicket({{ ticket.id }})">
       <span aria-hidden="true">&times;</span>
@@ -65,6 +67,7 @@
 <h2 align="center">Current Tickets:</h2>
 
 {% for data in tickets %}
+<div>
 
 <li class="list-group-item">
 
@@ -73,7 +76,7 @@
   <a href="mailto: {{user.email}}?subject=ITSC Notice TEST&body=This is a notice from Mount St. Mary's University Information Technology Student Center.">
     <u>{{user.email}}</u></a>{% endif %}{% endfor %} <br />
   <b>User ID#:</b> {{ data.user_id }} <br />
-  <b>Ticket:</b> {{ data.id }} | Date: {{ data.date }} <br /><hr />
+  <b>Ticket:</b> {{ data.id }} | Date: {{ data.date.strftime('%A, %B %d at %I:%M %p ') }} <br /><hr />
   <b>Issue:</b>
   {{ data.data }}
 
@@ -86,7 +89,6 @@
 <br />
 
 <br />
-
 
 </div>
 {% endfor %}

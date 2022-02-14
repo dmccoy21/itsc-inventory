@@ -3,6 +3,8 @@ from flask_login import login_required, current_user
 from .models import User, Ticket, InventoryIn, InventoryOut
 from . import db
 import json
+from datetime import datetime, timedelta
+
 
 routes = Blueprint('routes', __name__)
 
@@ -64,7 +66,7 @@ def sign_out():
     if item:
         db.session.delete(item)
         db.session.commit()
-        flash('Item SIGNED OUT!', category='success')
+        flash('Item DELETED!', category='error')
 
         # need to create functionality that adds the email to InventoryOut
 
@@ -93,7 +95,10 @@ def sign_in():
         db.session.delete(item)
         db.session.commit()
         flash('Item REMOVED!', category='success')
-        new_item = InventoryIn(item_name=item.item_name, item_type=item.item_type, item_number=item.item_number)
+        new_item = InventoryIn(item_name=item.item_name,
+                               item_type=item.item_type,
+                               item_number=item.item_number,
+                               dateIn=datetime.utcnow()-timedelta(hours=5))
         db.session.add(new_item)
         db.session.commit()
 

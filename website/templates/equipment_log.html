@@ -11,7 +11,10 @@
 <li class="list-group-item">
 
     <div>
-      {{ data.item_name }} - {% if data.item_number < 10 %}0{% endif %}{{ data.item_number }} | Time Out: {{ data.dateOut }} | Assignee:
+      {{ data.item_name }} - {% if data.item_number < 10 %}0{% endif %}{{ data.item_number }}
+        <br />
+        Time Out: {{ data.dateOut.strftime('%A, %B %d at %I:%M %p ') }}
+        <br />Requestor:
 
         {% for user in users %}
 
@@ -26,7 +29,7 @@
         | <a href="mailto: {{data.user_email}}?subject=ITSC Notice TEST&body=This is a notice from Mount St. Mary's University
         Information Technology Student Center."><u>{{ data.user_email }}</u></a>
 
-        | Return Time: {{ data.returnDate }}
+        <br />Return Time: {{ data.returnDate.strftime('%A, %B %d, %Y at %I:%M %p ') }}
 
         {% if current_user.department == 'MANAGER' %}
 
@@ -56,7 +59,7 @@
 
     <div>
         Item ID: {{ data.id }} | {{ data.item_name }} - {% if data.item_number < 10 %}0{% endif %}{{ data.item_number }}
-        | Time In: {{ data.dateIn }}
+        | Time In: {{ data.dateIn.strftime('%A, %B %d, %Y at %I:%M %p ') }}
 
         {% if current_user.department == 'MANAGER' %}
 

@@ -3,7 +3,7 @@ from .models import User, InventoryIn, InventoryOut
 from werkzeug.security import generate_password_hash, check_password_hash
 from . import db
 from flask_login import login_user, login_required, logout_user, current_user
-from datetime import datetime
+from datetime import datetime, timedelta
 
 
 auth = Blueprint('auth', __name__)
@@ -110,7 +110,10 @@ def log_item():
             item_name = request.form.get('item_name')
             item_number = request.form.get('item_number')
             item_type = request.form.get('item_type')
-            new_item = InventoryIn(item_name=item_name, item_number=int(item_number), item_type=item_type)
+            new_item = InventoryIn(item_name=item_name,
+                                   item_number=int(item_number),
+                                   item_type=item_type,
+                                   dateIn=datetime.utcnow()-timedelta(hours=5))
             db.session.add(new_item)
             db.session.commit()
             flash('Item Registered!', category='success')
@@ -143,15 +146,15 @@ def view_inventory():
     available = InventoryIn.query.order_by(InventoryIn.item_type.asc(), InventoryIn.item_number).all()
     users = User.query.order_by(User.last_name).all()
     out = InventoryOut.query.order_by(InventoryOut.item_type.asc(), InventoryOut.item_number).all()
+    flash('Now Viewing Updated Inventory', category='success')
     if current_user.department == 'MANAGER' or current_user.department == 'ITSC':
-        flash('Now Viewing Updated Inventory', category='success')
+
         if request.method == 'POST':
             item_type = request.form.get('item_type')
             item_name = request.form.get('item_name')
             item_number = request.form.get('item_number')
             email = request.form.get('email')
             returnDate = request.form.get('event-date')
-
             process_date = returnDate.replace('T', '-').replace(':', '-').split('-')
             process_date = [int(v) for v in process_date]
             returnDate = datetime(*process_date)
@@ -160,8 +163,10 @@ def view_inventory():
                                          item_type=item_type,
                                          item_number=item_number,
                                          user_email=email,
+                                         dateOut=datetime.utcnow() - timedelta(hours=5),
                                          returnDate=returnDate)
             db.session.add(equipment_out)
+            db.session.commit()
             item_id = request.form.get('item_id')
             switch = InventoryIn.query.get(int(item_id))
             db.session.delete(switch)

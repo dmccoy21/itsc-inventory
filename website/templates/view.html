@@ -40,8 +40,8 @@
 
           <br/>
 
-          <p>{{ equipment.item_type }}: {{ equipment.item_name }} - {% if equipment.item_number < 10 %}0{% endif %}
-            {{ equipment.item_number }} | Assigned: {{ equipment.dateOut }}</p>
+          <p>{{ equipment.item_type }}: {{ equipment.item_name }} - {% if equipment.item_number < 10 %}0{% endif %}{{ equipment.item_number }}
+            | Assigned: {{ equipment.dateOut.strftime('%A, %B %d at %I:%M %p ') }}</p>
 
         {% endif %}
 
@@ -70,8 +70,8 @@
 
           <br/>
 
-          <p>{{ equipment.item_type }}: {{ equipment.item_name }} - {% if equipment.item_number < 10 %}0{% endif %}{{ equipment.item_number }}</p>
-
+          <p>{{ equipment.item_type }}: {{ equipment.item_name }} - {% if equipment.item_number < 10 %}0{% endif %}{{ equipment.item_number }}
+            | Assigned: {{ equipment.dateOut.strftime('%A, %B %d at %I:%M %p ') }}</p>
         {% endif %}
 
       {% endfor %}
@@ -103,8 +103,8 @@
 
           <br/>
 
-          <p>{{ equipment.item_type }}: {{ equipment.item_name }} - {% if equipment.item_number < 10 %}0{% endif %}{{ equipment.item_number }}</p>
-
+          <p>{{ equipment.item_type }}: {{ equipment.item_name }} - {% if equipment.item_number < 10 %}0{% endif %}{{ equipment.item_number }}
+            | Assigned: {{ equipment.dateOut.strftime('%A, %B %d at %I:%M %p ') }}</p>
         {% endif %}
 
       {% endfor %}
@@ -135,7 +135,8 @@
 
           <br/>
 
-          <p>{{ equipment.item_type }}: {{ equipment.item_name }} - {% if equipment.item_number < 10 %}0{% endif %}{{ equipment.item_number }}</p>
+          <p>{{ equipment.item_type }}: {{ equipment.item_name }} - {% if equipment.item_number < 10 %}0{% endif %}{{ equipment.item_number }}
+            | Assigned: {{ equipment.dateOut.strftime('%A, %B %d at %I:%M %p ') }}</p>
 
         {% endif %}
 
