@@ -48,42 +48,42 @@ def logout():
 
 
 @auth.route('/tech/set_up_user', methods=['GET', 'POST'])
-# @login_required
+@login_required  #
 def sign_up():
     users = User.query.order_by(User.last_name).all()
-    # if current_user.department == 'MANAGER':
-    if request.method == 'POST':
-        # get form variables
-        email = request.form.get('email')
-        first_name = request.form.get('first_name')
-        last_name = request.form.get('last_name')
-        password1 = request.form.get('password1')
-        password2 = request.form.get('password2')
-        department = request.form.get('department')
-        # check if email already in database
-        user = User.query.filter_by(email=email).first()
-        if user:
-            flash('Email already exists.', category='error')
-        elif len(email) < 5:
-            flash('Email must be greater than 5 characters.', category='error')
-        elif len(first_name) < 3:
-            flash('First name must be greater than 3 character.', category='error')
-        elif len(last_name) < 3:
-            flash('Last name must be greater than 3 character.', category='error')
-        elif password1 != password2:
-            flash('Passwords don\'t match.', category='error')
-        elif len(password1) < 5:
-            flash('Password must be at least 5 characters.', category='error')
-        else:
-            new_user = User(email=email, first_name=first_name, last_name=last_name, password=generate_password_hash(
-                password1, method='sha256'), department=department)
-            db.session.add(new_user)
-            db.session.commit()
-            flash('Account Created!', category='success')
-            return redirect(url_for('routes.home'))
-    # else:
-    #     flash('Access Restricted', category='error')
-    #     return redirect(url_for('routes.home'))
+    if current_user.department == 'MANAGER':  #
+        if request.method == 'POST':  # un-tab if need to rebuild database
+            # get form variables
+            email = request.form.get('email')
+            first_name = request.form.get('first_name')
+            last_name = request.form.get('last_name')
+            password1 = request.form.get('password1')
+            password2 = request.form.get('password2')
+            department = request.form.get('department')
+            # check if email already in database
+            user = User.query.filter_by(email=email).first()
+            if user:
+                flash('Email already exists.', category='error')
+            elif len(email) < 5:
+                flash('Email must be greater than 5 characters.', category='error')
+            elif len(first_name) < 3:
+                flash('First name must be greater than 3 character.', category='error')
+            elif len(last_name) < 3:
+                flash('Last name must be greater than 3 character.', category='error')
+            elif password1 != password2:
+                flash('Passwords don\'t match.', category='error')
+            elif len(password1) < 5:
+                flash('Password must be at least 5 characters.', category='error')
+            else:
+                new_user = User(email=email, first_name=first_name, last_name=last_name, password=generate_password_hash(
+                    password1, method='sha256'), department=department)
+                db.session.add(new_user)
+                db.session.commit()
+                flash('Account Created!', category='success')
+                return redirect(url_for('routes.home'))
+        else:  #
+            flash('Access Restricted', category='error')  #
+            return redirect(url_for('routes.home'))  #
     return render_template("signup.html", user=current_user, users=users)
 
 
@@ -122,22 +122,6 @@ def log_item():
         flash('Access Restricted', category='error')
         return redirect(url_for('routes.home'))
     return render_template("item_log.html", user=current_user)
-
-
-# @auth.route('/tech/equipment_log')
-# @login_required
-# def view_inventory():
-#     # need to have a pointer by to user names
-#     available = InventoryIn.query.order_by(InventoryIn.item_type.asc(), InventoryIn.item_number).all()
-#     users = User.query.order_by(User.last_name).all()
-#     out = InventoryOut.query.order_by(InventoryOut.item_type.asc(), InventoryOut.item_number).all()
-#     if current_user.department == 'MANAGER' or current_user.department == 'ITSC':
-#         flash('Now Viewing Updated Inventory', category='success')
-#         return render_template("equipment_log.html", user=current_user, available=available, out=out, users=users)
-#     else:
-#         flash('Access Restricted', category='error')
-#         return redirect(url_for('routes.home'))
-#     return render_template("equipment_log.html", user=current_user, users=users)
 
 
 @auth.route('/tech/equipment_log', methods=['GET', 'POST'])

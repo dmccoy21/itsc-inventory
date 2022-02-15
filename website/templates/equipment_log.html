@@ -1,6 +1,6 @@
 {% extends "base.html" %} {% block title %}Equipment Log v2{% endblock %} {% block content %}
 
-<h2 align="center" xmlns="http://www.w3.org/1999/html">Equipment Log v2</h2>
+<h2 align="center"> <!--xmlns="http://www.w3.org/1999/html" -->Equipment Log v2</h2>
 
 <hr />
 
@@ -31,7 +31,7 @@
 
         <br />Return Time: {{ data.returnDate.strftime('%A, %B %d, %Y at %I:%M %p ') }}
 
-        {% if current_user.department == 'MANAGER' %}
+        {% if user.department == 'MANAGER' or user.department == 'ITSC' %}
 
         <button type="button" class="close" onClick="signIn({{ data.id }})">
         <span aria-hidden="true">&times;</span>
@@ -51,17 +51,18 @@
 
 <h3 align="center">*Available Equipment*</h3>
 
-<ul class="list-group list-group-flush" id="inventory">
+
 
 {% for data in available %}
 
     <li class="list-group-item">
 
     <div>
-        Item ID: {{ data.id }} | {{ data.item_name }} - {% if data.item_number < 10 %}0{% endif %}{{ data.item_number }}
-        | Time In: {{ data.dateIn.strftime('%A, %B %d, %Y at %I:%M %p ') }}
+        {{ data.item_name }} - {% if data.item_number < 10 %}0{% endif %}{{ data.item_number }}<br />
+        Item ID: {{ data.id }} <br />
+        Time In: {{ data.dateIn.strftime('%A, %B %d, %Y at %I:%M %p ') }}
 
-        {% if current_user.department == 'MANAGER' %}
+        {% if user.department == 'MANAGER' or user.department == 'ITSC' %}
 
         <button type="button" class="close" onClick="signOut({{ data.id }})">
         <span aria-hidden="true">&times;</span>
@@ -77,7 +78,7 @@
 
 {% endfor %}
 
-</ul>
+
 
 <hr />
 

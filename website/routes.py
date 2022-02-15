@@ -21,7 +21,9 @@ def home():
         if len(ticket) < 1:
             flash('Blank Ticket', category='error')
         else:
-            new_ticket = Ticket(data=ticket, user_id=current_user.id)
+            new_ticket = Ticket(data=ticket,
+                                user_id=current_user.id,
+                                date=datetime.utcnow()-timedelta(hours=5))
             db.session.add(new_ticket)
             db.session.commit()
             flash('Ticket added!', category='success')

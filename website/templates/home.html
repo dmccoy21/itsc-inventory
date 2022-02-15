@@ -62,6 +62,14 @@
 
 </form>
 
+{% if user.department != 'ITSC' and user.department != 'MANAGER' %}
+<br />
+<hr />
+  <iframe src="https://calendar.msmary.edu/index.php" width="1110px" height="750px" />
+<br />
+<br />
+{% endif %}
+
 {% else %}
 
 <h2 align="center">Current Tickets:</h2>
@@ -91,6 +99,7 @@
 <br />
 
 </div>
+
 {% endfor %}
 
 {% endif %}

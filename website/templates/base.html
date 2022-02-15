@@ -8,6 +8,11 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
+    <!--
+    * links the bootstrap style sheets
+    * i did not create these
+    -->
+
     <link
       rel="stylesheet"
       href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
@@ -20,6 +25,11 @@
       href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
       crossorigin="anonymous"
     />
+
+    <!--
+     * style sheet for colors of users
+     * select is resized
+     -->
 
     <style>
 
@@ -82,15 +92,15 @@
 
         <div class="navbar-nav">
 
-          {% if user.is_authenticated %}
+          {% if user.is_authenticated %} <!-- checks if user is signed in-->
 
           <a class="nav-item nav-link" id="home" href="/home">Home</a>
 
-            {% if user.department == 'ITSC' or user.department == 'MANAGER' %}
+            {% if user.department == 'ITSC' or user.department == 'MANAGER' %} <!-- ITSC workers and MANAGERs only -->
 
               {% if user.department == 'MANAGER' %}
 
-                <a class="nav-item nav-link" id="create" href="/tech/set_up_user">Add User</a>
+                <a class="nav-item nav-link" id="create" href="/tech/set_up_user">Add User</a> <!-- MANAGER access only -->
 
               {%endif%}
 
@@ -116,6 +126,10 @@
       </div>
 
     </nav>
+
+    <!--
+    * success or error messages
+    -->
 
     {% with messages = get_flashed_messages(with_categories=true) %} {% if messages %}
     {% for category, message in messages %} {% if category == 'error' %}
@@ -172,6 +186,10 @@
   </body>
 
   <footer style="color:grey; position:sticky;" align="right">
+
+    <!--
+    * clickable email link
+    -->
 
     <a href="mailto: itsc@msmary.edu?subject=Emergency Ticket&body=Please state your emergency issue as clear as possible.">itsc@msmary.edu</a>
 
