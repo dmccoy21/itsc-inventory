@@ -47,11 +47,18 @@ def logout():
     return redirect(url_for('auth.login'))
 
 
+@auth.route('/calendar', methods=['GET', 'POST'])
+@login_required
+def calendar():
+    # redirect to calendar page
+    return render_template("calendar.html", user=current_user)
+
+
 @auth.route('/tech/set_up_user', methods=['GET', 'POST'])
 @login_required  #
 def sign_up():
     users = User.query.order_by(User.last_name).all()
-    if current_user.department == 'MANAGER':  #
+    if current_user.department == 'MANAGER':
         if request.method == 'POST':  # un-tab if need to rebuild database
             # get form variables
             email = request.form.get('email')
@@ -81,9 +88,9 @@ def sign_up():
                 db.session.commit()
                 flash('Account Created!', category='success')
                 return redirect(url_for('routes.home'))
-        else:  #
-            flash('Access Restricted', category='error')  #
-            return redirect(url_for('routes.home'))  #
+    else:
+        flash('Access Restricted', category='error')
+        return redirect(url_for('routes.home'))  #
     return render_template("signup.html", user=current_user, users=users)
 
 
@@ -130,6 +137,7 @@ def view_inventory():
     available = InventoryIn.query.order_by(InventoryIn.item_type.asc(), InventoryIn.item_number).all()
     users = User.query.order_by(User.last_name).all()
     out = InventoryOut.query.order_by(InventoryOut.item_type.asc(), InventoryOut.item_number).all()
+
     flash('Now Viewing Updated Inventory', category='success')
     if current_user.department == 'MANAGER' or current_user.department == 'ITSC':
 

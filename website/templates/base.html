@@ -69,6 +69,27 @@
           height: 30px;
       }
 
+      html {
+            overflow: auto;
+        }
+
+      html,
+      body,
+      iframe {
+          margin: 0px;
+          padding: 0px;
+          height: 100%;
+          border: none;
+      }
+
+      iframe {
+          display: block;
+          width: 100%;
+          border: none;
+          overflow-y: auto;
+          overflow-x: hidden;
+      }
+
     </style>
 
     <title>{% block title %}{% endblock %}</title>
@@ -95,6 +116,8 @@
           {% if user.is_authenticated %} <!-- checks if user is signed in-->
 
           <a class="nav-item nav-link" id="home" href="/home">Home</a>
+
+          <a class="nav-item nav-link" id="calendar" href="/calendar">Calendar</a>
 
             {% if user.department == 'ITSC' or user.department == 'MANAGER' %} <!-- ITSC workers and MANAGERs only -->
 
@@ -156,7 +179,11 @@
 
     </div>
 
-    {% endif %} {% endfor %} {% endif %} {% endwith %}
+    {% endif %}
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+
 
     <div class="container">{% block content %} {% endblock %}</div>
 

@@ -70,21 +70,6 @@ def sign_out():
         db.session.commit()
         flash('Item DELETED!', category='error')
 
-        # need to create functionality that adds the email to InventoryOut
-
-    # email = request.form.get('assignee')
-    # email = str(email)
-    #
-    # new_item = InventoryOut(item_name=item.item_name,
-    #                         item_type=item.item_type,
-    #                         item_number=item.item_number,
-    #                         user_email=email)
-    #
-    # # currents displays Assigned as 'None'
-    #
-    # db.session.add(new_item)
-    # db.session.commit()
-
     return jsonify({})
 
 
