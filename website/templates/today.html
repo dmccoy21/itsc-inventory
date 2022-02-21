@@ -1,0 +1,50 @@
+{% extends "base.html" %} {% block title %}Today{% endblock %} {% block content %}
+
+<h2 align="center">{{ today }}</h2>
+
+{% for data in out %}
+
+{% if data.returnDate.strftime('%A, %B %d') == today %}
+
+<li class="list-group-item">
+
+    <div>
+        {{ data.item_name }} - {% if data.item_number < 10 %}0{% endif %}{{ data.item_number }}
+        <br />
+        Time Out: {{ data.dateOut.strftime('%A, %B %d at %I:%M %p') }}
+        <br />Requestor:
+
+        {% for user in users %}
+
+            {% if user.email == data.user_email %}
+
+                {{ user.first_name }} {{ user.last_name }}
+
+            {% endif %}
+
+        {% endfor %}
+
+        | <a href="mailto: {{data.user_email}}?subject=ITSC Notice TEST&body=This is a notice from Mount St. Mary's University
+        Information Technology Student Center."><u>{{ data.user_email }}</u></a>
+
+        <br />Return Time: {{ data.returnDate.strftime('%A, %B %d, %Y at %I:%M %p') }}
+
+        {% if user.department == 'MANAGER' or user.department == 'ITSC' %}
+
+        <button type="button" class="close" onClick="signIn({{ data.id }})">
+        <span aria-hidden="true">&times;</span>
+        </button>
+
+        {% endif %}
+
+    </div>
+
+    </li>
+
+<br />
+
+{% endif %}
+
+{% endfor %}
+
+{% endblock %}

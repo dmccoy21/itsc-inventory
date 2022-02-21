@@ -171,3 +171,58 @@ def view_inventory():
         flash('Access Restricted', category='error')
         return redirect(url_for('routes.home'))
     return render_template("equipment_log.html", user=current_user, users=users)
+
+
+@auth.route('/tech/overdue', methods=['GET', 'POST'])
+@login_required
+def overdue():
+    users = User.query.order_by(User.last_name).all()
+    out = InventoryOut.query.order_by(InventoryOut.item_type.asc(), InventoryOut.item_number).all()
+    overdue = InventoryOut.query.filter(InventoryOut.returnDate < (datetime.utcnow() - timedelta(hours=5))).all()
+    if current_user.department == 'MANAGER' or current_user.department == 'ITSC':
+        return render_template("overdue.html", user=current_user, out=out, users=users, overdue=overdue)
+    else:
+        flash('Access Restricted', category='error')
+        return redirect(url_for('routes.home'))
+
+    return render_template("overdue.html", user=current_user, out=out, users=users)
+
+
+@auth.route('/tech/today', methods=['GET', 'POST'])
+@login_required
+def today():
+    users = User.query.order_by(User.last_name).all()
+    out = InventoryOut.query.order_by(InventoryOut.item_type.asc(), InventoryOut.item_number).all()
+    today = datetime.today().isoweekday()
+
+    if (today == 1):
+        today = datetime.utcnow() - timedelta(hours=5)
+        today = today.strftime('%A, %B %d')
+
+    elif (today == 2):
+        today = 'Tuesday'
+
+    elif (today == 3):
+        today = 'Wednesday'
+
+    elif (today == 4):
+        today = 'Thursday'
+
+    elif (today == 5):
+        today = 'Friday'
+
+    elif (today == 6):
+        today = 'Saturday'
+
+    elif (today == 7):
+        today = 'Sunday'
+
+
+
+    if current_user.department == 'MANAGER' or current_user.department == 'ITSC':
+        return render_template("today.html", user=current_user, out=out, users=users, today=today)
+    else:
+        flash('Access Restricted', category='error')
+        return redirect(url_for('routes.home'))
+    return render_template("today.html", user=current_user, out=out, users=users, today=today)
+

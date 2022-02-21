@@ -13,7 +13,7 @@
     <div>
       {{ data.item_name }} - {% if data.item_number < 10 %}0{% endif %}{{ data.item_number }}
         <br />
-        Time Out: {{ data.dateOut.strftime('%A, %B %d at %I:%M %p ') }}
+        Time Out: {{ data.dateOut.strftime('%A, %B %d at %I:%M %p') }}
         <br />Requestor:
 
         {% for user in users %}
@@ -29,7 +29,7 @@
         | <a href="mailto: {{data.user_email}}?subject=ITSC Notice TEST&body=This is a notice from Mount St. Mary's University
         Information Technology Student Center."><u>{{ data.user_email }}</u></a>
 
-        <br />Return Time: {{ data.returnDate.strftime('%A, %B %d, %Y at %I:%M %p ') }}
+        <br />Return Time: {{ data.returnDate.strftime('%A, %B %d, %Y at %I:%M %p') }}
 
         {% if user.department == 'MANAGER' or user.department == 'ITSC' %}
 
@@ -60,7 +60,7 @@
     <div>
         {{ data.item_name }} - {% if data.item_number < 10 %}0{% endif %}{{ data.item_number }}<br />
         Item ID: {{ data.id }} <br />
-        Time In: {{ data.dateIn.strftime('%A, %B %d, %Y at %I:%M %p ') }}
+        Time In: {{ data.dateIn.strftime('%A, %B %d, %Y at %I:%M %p') }}
 
         {% if user.department == 'MANAGER' or user.department == 'ITSC' %}
 
