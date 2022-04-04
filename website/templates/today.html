@@ -2,6 +2,8 @@
 
 <h2 align="center">{{ today }}</h2>
 
+<hr />
+
 {% for data in out %}
 
 {% if data.returnDate.strftime('%A, %B %d') == today %}
@@ -9,9 +11,12 @@
 <li class="list-group-item">
 
     <div>
-        {{ data.item_name }} - {% if data.item_number < 10 %}0{% endif %}{{ data.item_number }}
+        {{ data.item_name.replace('_', ' ') }} - {% if data.item_number < 10 %}0{% endif %}{{ data.item_number }}
+
         <br />
+
         Time Out: {{ data.dateOut.strftime('%A, %B %d at %I:%M %p') }}
+
         <br />Requestor:
 
         {% for user in users %}
@@ -25,14 +30,20 @@
         {% endfor %}
 
         | <a href="mailto: {{data.user_email}}?subject=ITSC Notice TEST&body=This is a notice from Mount St. Mary's University
-        Information Technology Student Center."><u>{{ data.user_email }}</u></a>
+        Information Technology Student Center.">
+
+            <u>{{ data.user_email }}</u>
+
+        </a>
 
         <br />Return Time: {{ data.returnDate.strftime('%A, %B %d, %Y at %I:%M %p') }}
 
-        {% if user.department == 'MANAGER' or user.department == 'ITSC' %}
+        {% if user.department == 'MANAGER' or user.department == 'ITSC' or user.department == 'LEAD' %}
 
         <button type="button" class="close" onClick="signIn({{ data.id }})">
-        <span aria-hidden="true">&times;</span>
+
+            <span aria-hidden="true">&times;</span>
+
         </button>
 
         {% endif %}

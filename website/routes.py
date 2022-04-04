@@ -1,34 +1,50 @@
-from flask import Blueprint, render_template, request, flash, jsonify
+from flask import Flask, Blueprint, render_template, request, flash, jsonify
 from flask_login import login_required, current_user
+from flask_mail import Mail, Message
 from .models import User, Ticket, InventoryIn, InventoryOut
 from . import db
 import json
 from datetime import datetime, timedelta
+import smtplib
 
 
 routes = Blueprint('routes', __name__)
 
 
-@routes.route('/', methods={'GET', 'POST'})
+@routes.route('/email', methods=['GET', 'POST'])
+def send_email():
+    return render_template("email.html", user=current_user)
+
+
+@routes.route('/', methods=['GET', 'POST'])
 @routes.route('/home', methods=['GET', 'POST'])
 @login_required
 def home():
+    # get all tickets
     tickets = Ticket.query.all()
+    # get all users
     users = User.query.all()
+    # get managers
+    managers = User.query.filter_by(department='MANAGER').all()
     if request.method == 'POST':
+        # grab ticket text
         ticket = request.form.get('ticket')
 
+        # checking if ticket is blank
         if len(ticket) < 1:
             flash('Blank Ticket', category='error')
         else:
+            # create instance of ticket
             new_ticket = Ticket(data=ticket,
                                 user_id=current_user.id,
                                 date=datetime.utcnow()-timedelta(hours=5))
+            # add new ticket to database
             db.session.add(new_ticket)
+            # update & save database
             db.session.commit()
             flash('Ticket added!', category='success')
 
-    return render_template("home.html", user=current_user, tickets=tickets, users=users)
+    return render_template("home.html", user=current_user, tickets=tickets, users=users, managers=managers)
 
 
 @routes.route('/delete-ticket', methods=['POST'])
@@ -37,12 +53,12 @@ def delete_ticket():
     ticketId = ticket['ticketId']
     ticket = Ticket.query.get(ticketId)
     if ticket:
-        if ticket.user_id == current_user.id or current_user.department == 'MANAGER':
+        if ticket.user_id == current_user.id or current_user.department == 'MANAGER' or current_user.department == 'LEAD':
             db.session.delete(ticket)
             db.session.commit()
             if ticket.user_id == current_user.id:
                 flash('Ticket DELETED!', category='error')
-            if current_user.department == 'MANAGER':
+            if current_user.department == 'MANAGER' or current_user.department == 'LEAD':
                 flash('Ticket CLOSED!', category='success')
 
     return jsonify({})

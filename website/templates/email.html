@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+
+
+    <title>Prototype</title>
+
+    <style>
+        div {
+        border-radius: 25px;
+        }
+
+        #profile {
+        align: left;
+        }
+
+        .card {
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+        max-width: 300px;
+        margin: auto;
+        text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+      <div class="logo">
+        <h4>Navigation</h4>
+      </div>
+      <ul class="nav-links">
+
+        {% if user.is_authenticated %} <!-- checks if user is signed in-->
+
+        <li>
+            <a href="/home">Home</a>
+        </li>
+        <li>
+            <a href="/calendar">Calendar</a>
+        </li>
+        <li>
+            <a href="/email">Email</a>
+        </li>
+            {% if user.department == 'ITSC' or user.department == 'MANAGER' or user.department == 'LEAD' %} <!-- ITSC workers and MANAGERs only -->
+
+                {% if user.department == 'MANAGER' or user.department == 'LEAD'%}
+                    <li>
+                        <a href="/tech/set_up_user">Add User</a> <!-- MANAGER access only -->
+                    </li>
+                {%endif%}
+
+                <li>
+                    <a href="/tech/view_users" target="_blank">View Users</a>
+                </li>
+
+                <li>
+                    <a href="/tech/item_log">Item Registry</a>
+                </li>
+
+                <li>
+                    <a href="/tech/equipment_log">Equipment Log</a>
+                </li>
+
+                <li>
+                    <a href="/tech/today">Today</a>
+                </li>
+
+                <li>
+                    <a href="/tech/overdue">Overdue</a>
+                </li>
+
+            {%endif%}
+
+            <li>
+                <a href="/logout">Logout</a>
+            </li>
+
+        {% else %}
+
+        <!--<a class="nav-item nav-link" id="login" href="/login">Login</a> -->
+
+        {% endif %}
+
+      </ul>
+
+        <div class="expand">
+            <div class="line1"></div>
+            <div class="line2"></div>
+            <div class="line3"></div>
+        </div>
+
+    </nav>
+
+    <script src="{{ url_for('static', filename='nav.js')}}"></script>
+
+    <p>This is a test to understand why the nav isn't working... What the heck is going on?</p>
+
+    <div>
+
+        <p>This is another test with a div box...</p>
+
+    </div>
+
+    <div class="card" id="profile">
+
+        <p>{{ user.first_name }} {{ user.last_name}} | Role: {{ user.department }}</p>
+
+        <p class="title">{{ user.email }}</p>
+
+        <p>ID #474445{{ user.id }}</p>
+
+    </div>
+
+</body>
+</html>

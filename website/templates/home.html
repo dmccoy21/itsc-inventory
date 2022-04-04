@@ -1,26 +1,38 @@
 {% extends "base.html" %} {% block title %}Home{% endblock %} {% block content %}
 
-<h2><u>Account Information:</u></h2>
+<br />
 
-{% if user.department != "ITSC" and user.department != "MANAGER" %}
+{% if user.department != "ITSC" and user.department != "MANAGER" and user.department != 'LEAD' %}
 
-<p>User: {{ user.first_name }} {{ user.last_name}}</p>
-<p>E-mail: {{ user.email }}</p>
-<p>Department: {{ user.department }} | ID #68679{{ user.id }}</p>
+<div class="card" id="profile">
+
+  <h1>{{ user.first_name }} {{ user.last_name}}</h1>
+
+  <p class="title">E-mail: {{ user.email }}</p>
+
+  <p>Department: {{ user.department }} | ID #68679{{ user.id }}</p>
+
+</div>
 
 <hr />
 
 {% else %}
 
-<p>Technician: {{ user.first_name }} {{ user.last_name}} | Role: {{ user.department }}</p>
-<p>E-mail: {{ user.email }}</p>
-<p>ID #474445{{ user.id }}</p>
+<div class="card" id="profile">
+
+  <p>{{ user.first_name }} {{ user.last_name}} | Role: {{ user.department }}</p>
+
+  <p class="title">{{ user.email }}</p>
+
+  <p>ID #474445{{ user.id }}</p>
+
+</div>
 
 <hr />
 
 {% endif %}
 
-{% if user.department != "ITSC" and user.department != "MANAGER" %}
+{% if user.department != "ITSC" and user.department != "MANAGER" and user.department != 'LEAD' %}
 
 <h1 align="center">* Submit A Ticket *</h1>
 
@@ -38,7 +50,7 @@
 
   <hr />
 
-  <h1 align="center">* Ticket History *</h1>
+  <h1 align="center">* My History *</h1>
 
   <ul class="list-group list-group-flush" id="tickets">
 
@@ -61,28 +73,20 @@
   </ul>
 
 </form>
-<!--
-{% if user.department != 'ITSC' and user.department != 'MANAGER' %}
-<br />
-<hr />
-  <iframe src="https://calendar.msmary.edu/index.php" width="1110px" height="750px" />
-<br />
-<br />
-{% endif %}
--->
 
 {% else %}
 
 <h2 align="center">Current Tickets:</h2>
 
 {% for data in tickets %}
+
 <div>
 
 <li class="list-group-item">
 
   {% for user in users %}{% if user.id == data.user_id %}<b>{{ user.first_name }} {{ user.last_name }} </b> |
-
-  <a href="mailto: {{user.email}}?subject=ITSC Notice TEST&body=This is a notice from Mount St. Mary's University Information Technology Student Center.">
+  <a href="/email">{{ user.email }}</a>
+  <!--<a href="mailto: {{user.email}}?subject=ITSC Notice TEST&body=This is a notice from Mount St. Mary's University Information Technology Student Center.">-->
     <u>{{user.email}}</u></a>{% endif %}{% endfor %} <br />
   <b>User ID#:</b> {{ data.user_id }} <br />
   <b>Ticket:</b> {{ data.id }} | Date: {{ data.date.strftime('%A, %B %d at %I:%M %p ') }} <br /><hr />
@@ -90,14 +94,45 @@
   {{ data.data }}
 
   <button type="button" class="close" onClick="deleteTicket({{ data.id }})">
-      <span aria-hidden="true">&times;</span>
-    </button>
+    <span aria-hidden="true">&times;</span>
+  </button>
+
+  <hr />
+
+
+  {% if user.department == 'MANAGER' or user.department == 'LEAD' %}
+
+  *** This feature is not functional yet ***<br />
+
+  <form method="POST">
+
+  <b>Assign to:</b>
+
+    <select name="assign">
+
+      <option hidden="">SELECT</option>
+
+      {% for manager in managers %}
+
+      <option>{{ manager.first_name }} {{ manager.last_name }}</option>
+
+      {% endfor %}
+
+      <option>Student Workers</option>
+
+    </select>
+
+  <button type="submit" onClick="get_id({{ data.id }})">ASSIGN</button>
+
+  <br />
+
+  <p>*** end ***</p>
+
+  </form>
+
+  {% endif %}
 
 </li>
-
-<br />
-
-<br />
 
 </div>
 

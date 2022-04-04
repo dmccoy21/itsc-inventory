@@ -9,9 +9,25 @@ from datetime import datetime, timedelta
 auth = Blueprint('auth', __name__)
 
 
+# creates admin
+def create_admin():
+    admin = User(email="admin@email.com", first_name="admin", last_name="user",
+                 password=generate_password_hash("root", method='sha256'),
+                 department="LEAD")
+    db.session.add(admin)
+    db.session.commit()
+
+
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
-    # if user if submitting login form
+    # this will create admin upon database rebuilds
+    admin = User.query.filter_by(first_name="admin").first()
+    if admin:
+        pass
+    else:
+        create_admin()
+
+    # if user is submitting login form
     if request.method == 'POST':
         # get email
         email = request.form.get('email')
@@ -44,6 +60,7 @@ def logout():
     # log user out
     logout_user()
     # return to login page, restricts access to other pages
+    flash('Logged Out!', category='success')
     return redirect(url_for('auth.login'))
 
 
@@ -58,7 +75,7 @@ def calendar():
 @login_required  #
 def sign_up():
     users = User.query.order_by(User.last_name).all()
-    if current_user.department == 'MANAGER':
+    if current_user.department == 'MANAGER' or current_user.department == 'LEAD':
         if request.method == 'POST':  # un-tab if need to rebuild database
             # get form variables
             email = request.form.get('email')
@@ -98,8 +115,9 @@ def sign_up():
 @login_required
 def view_users():
     users = User.query.order_by(User.last_name).all()
+
     out = InventoryOut.query.order_by(InventoryOut.user_email.asc()).all()
-    if current_user.department == 'MANAGER' or current_user.department == 'ITSC':
+    if current_user.department == 'MANAGER' or current_user.department == 'ITSC' or current_user.department == 'LEAD':
         flash('Now Viewing Updated Database', category='success')
         out = InventoryOut.query.order_by(InventoryOut.user_email.asc()).all()
         return render_template("view.html", user=current_user, users=users, out=out)
@@ -112,7 +130,44 @@ def view_users():
 @auth.route('/tech/item_log', methods=['GET', 'POST'])
 @login_required
 def log_item():
-    if current_user.department == 'MANAGER' or current_user.department == 'ITSC':
+    inventory_in = InventoryIn.query.order_by(InventoryIn.item_type.asc()).all()
+    inventory_out = InventoryOut.query.order_by(InventoryOut.item_type.asc()).all()
+    lead = User.query.filter_by(department='LEAD').first()
+
+    full_inventory = []
+    for x in inventory_in:
+        full_inventory.append(x)
+
+    for x in inventory_out:
+        full_inventory.append(x)
+
+    item_types = []
+    for x in inventory_in:
+        if x.item_type not in item_types:
+            item_types.append(x.item_type)
+
+    for x in inventory_out:
+        if x.item_type not in item_types:
+            item_types.append(x.item_type)
+
+    item_names = []
+    for x in inventory_in:
+        if x.item_name not in item_names:
+            item_names.append(x.item_name)
+
+    for x in inventory_out:
+        if x.item_name not in item_names:
+            item_names.append(x.item_name)
+
+    item_counts = []
+    for x in item_names:
+        counter = 0
+        for y in full_inventory:
+            if x == y.item_name:
+                counter += 1
+        item_counts.append(counter)
+
+    if current_user.department == 'MANAGER' or current_user.department == 'ITSC' or current_user.department == 'LEAD':
         if request.method == 'POST':
             item_name = request.form.get('item_name')
             item_number = request.form.get('item_number')
@@ -128,7 +183,9 @@ def log_item():
     else:
         flash('Access Restricted', category='error')
         return redirect(url_for('routes.home'))
-    return render_template("item_log.html", user=current_user)
+    return render_template("item_log.html", user=current_user, lead=lead,
+                           item_names=item_names, item_counts=item_counts, item_types=item_types,
+                           full_inventory=full_inventory, min=min(item_counts))
 
 
 @auth.route('/tech/equipment_log', methods=['GET', 'POST'])
@@ -139,7 +196,7 @@ def view_inventory():
     out = InventoryOut.query.order_by(InventoryOut.item_type.asc(), InventoryOut.item_number).all()
 
     flash('Now Viewing Updated Inventory', category='success')
-    if current_user.department == 'MANAGER' or current_user.department == 'ITSC':
+    if current_user.department == 'MANAGER' or current_user.department == 'ITSC' or current_user.department == 'LEAD':
 
         if request.method == 'POST':
             item_type = request.form.get('item_type')
@@ -179,7 +236,7 @@ def overdue():
     users = User.query.order_by(User.last_name).all()
     out = InventoryOut.query.order_by(InventoryOut.item_type.asc(), InventoryOut.item_number).all()
     overdue = InventoryOut.query.filter(InventoryOut.returnDate < (datetime.utcnow() - timedelta(hours=5))).all()
-    if current_user.department == 'MANAGER' or current_user.department == 'ITSC':
+    if current_user.department == 'MANAGER' or current_user.department == 'ITSC' or current_user.department == 'LEAD':
         return render_template("overdue.html", user=current_user, out=out, users=users, overdue=overdue)
     else:
         flash('Access Restricted', category='error')
@@ -193,36 +250,33 @@ def overdue():
 def today():
     users = User.query.order_by(User.last_name).all()
     out = InventoryOut.query.order_by(InventoryOut.item_type.asc(), InventoryOut.item_number).all()
-    today = datetime.today().isoweekday()
+    day = datetime.today().isoweekday()
 
-    if (today == 1):
-        today = datetime.utcnow() - timedelta(hours=5)
-        today = today.strftime('%A, %B %d')
+    if day == 1:
+        day = datetime.utcnow() - timedelta(hours=5)
+        day = day.strftime('%A, %B %d')
+    elif day == 2:
+        day = datetime.utcnow() - timedelta(hours=5)
+        day = day.strftime('%A, %B %d')
+    elif day == 3:
+        day = datetime.utcnow() - timedelta(hours=5)
+        day = day.strftime('%A, %B %d')
+    elif day == 4:
+        day = datetime.utcnow() - timedelta(hours=5)
+        day = day.strftime('%A, %B %d')
+    elif day == 5:
+        day = datetime.utcnow() - timedelta(hours=5)
+        day = day.strftime('%A, %B %d')
+    elif day == 6:
+        day = datetime.utcnow() - timedelta(hours=5)
+        day = day.strftime('%A, %B %d')
+    elif day == 7:
+        day = datetime.utcnow() - timedelta(hours=5)
+        day = day.strftime('%A, %B %d')
 
-    elif (today == 2):
-        today = 'Tuesday'
-
-    elif (today == 3):
-        today = 'Wednesday'
-
-    elif (today == 4):
-        today = 'Thursday'
-
-    elif (today == 5):
-        today = 'Friday'
-
-    elif (today == 6):
-        today = 'Saturday'
-
-    elif (today == 7):
-        today = 'Sunday'
-
-
-
-    if current_user.department == 'MANAGER' or current_user.department == 'ITSC':
-        return render_template("today.html", user=current_user, out=out, users=users, today=today)
+    if current_user.department == 'MANAGER' or current_user.department == 'ITSC' or current_user.department == 'LEAD':
+        return render_template("today.html", user=current_user, out=out, users=users, today=day)
     else:
         flash('Access Restricted', category='error')
         return redirect(url_for('routes.home'))
-    return render_template("today.html", user=current_user, out=out, users=users, today=today)
-
+    return render_template("today.html", user=current_user, out=out, users=users, today=day)

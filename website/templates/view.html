@@ -14,7 +14,7 @@
 
   <li class="list-group-item">
 
-    {% if data.department == 'MANAGER' %}
+    {% if data.department == 'MANAGER' or data.department == 'LEAD' %}
 
     <div class="admin_users">
       {{ data.id }} | {{ data.last_name }}, {{ data.first_name }} | {{ data.department }} |
@@ -22,7 +22,7 @@
       <a href="mailto: {{data.email}}?subject=ITSC Notice TEST&body=This is a notice from Mount St. Mary's University
       Information Technology Student Center." style="color: white"><u>{{data.email}}</u></a>
 
-        {% if current_user.department == 'MANAGER' %}
+        {% if current_user.department == 'MANAGER' or current_user.department == 'LEAD' %}
 
         <button type="button" class="close" onClick="deleteUser({{ data.id }})">
           <span aria-hidden="true">&times;</span>
@@ -40,7 +40,7 @@
 
           <br/>
 
-          <p>{{ equipment.item_type }}: {{ equipment.item_name }} - {% if equipment.item_number < 10 %}0{% endif %}{{ equipment.item_number }}
+          <p>{{ equipment.item_type.replace('_', ' ') }}: {{ equipment.item_name.replace('_', ' ') }} - {% if equipment.item_number < 10 %}0{% endif %}{{ equipment.item_number }}
             | Assigned: {{ equipment.dateOut.strftime('%A, %B %d at %I:%M %p ') }}</p>
 
         {% endif %}
@@ -52,7 +52,7 @@
     <div class="itsc_users">
 
       {{ data.id }} | {{ data.last_name }}, {{ data.first_name }} | {{ data.department }} | <a href="mailto: {{data.email}}?subject=ITSC Notice TEST&body=This is a notice from Mount St. Mary's University Information Technology Student Center." style="color: white"><u>{{data.email}}</u></a>
-      {% if current_user.department == 'MANAGER' %}
+      {% if current_user.department == 'MANAGER' or current_user.department == 'LEAD' %}
 
       <button type="button" class="close" onClick="deleteUser({{ data.id }})">
       <span aria-hidden="true">&times;</span>
@@ -70,7 +70,7 @@
 
           <br/>
 
-          <p>{{ equipment.item_type }}: {{ equipment.item_name }} - {% if equipment.item_number < 10 %}0{% endif %}{{ equipment.item_number }}
+          <p>{{ equipment.item_type.replace('_', ' ') }}: {{ equipment.item_name.replace('_', ' ') }} - {% if equipment.item_number < 10 %}0{% endif %}{{ equipment.item_number }}
             | Assigned: {{ equipment.dateOut.strftime('%A, %B %d at %I:%M %p ') }}</p>
         {% endif %}
 
@@ -85,7 +85,7 @@
       <a href="mailto: {{data.email}}?subject=ITSC Notice TEST&body=This is a notice from Mount St. Mary's University
       Information Technology Student Center." style="color: white"><u>{{data.email}}</u></a>
 
-      {% if current_user.department == 'MANAGER' %}
+      {% if current_user.department == 'MANAGER' or user.department == 'LEAD' %}
 
       <button type="button" class="close" onClick="deleteUser({{ data.id }})">
       <span aria-hidden="true">&times;</span>
@@ -103,8 +103,9 @@
 
           <br/>
 
-          <p>{{ equipment.item_type }}: {{ equipment.item_name }} - {% if equipment.item_number < 10 %}0{% endif %}{{ equipment.item_number }}
+          <p>{{ equipment.item_type.replace('_', ' ') }}: {{ equipment.item_name.replace('_', ' ') }} - {% if equipment.item_number < 10 %}0{% endif %}{{ equipment.item_number }}
             | Assigned: {{ equipment.dateOut.strftime('%A, %B %d at %I:%M %p ') }}</p>
+
         {% endif %}
 
       {% endfor %}
@@ -117,7 +118,7 @@
       <a href="mailto: {{data.email}}?subject=ITSC Notice TEST&body=This is a notice from Mount St. Mary's University
       Information Technology Student Center." style="color: white"><u>{{data.email}}</u></a>
 
-      {% if current_user.department == 'MANAGER' %}
+      {% if current_user.department == 'MANAGER' or user.department == 'LEAD' %}
 
       <button type="button" class="close" onClick="deleteUser({{ data.id }})">
         <span aria-hidden="true">&times;</span>
@@ -135,7 +136,7 @@
 
           <br/>
 
-          <p>{{ equipment.item_type }}: {{ equipment.item_name }} - {% if equipment.item_number < 10 %}0{% endif %}{{ equipment.item_number }}
+          <p>{{ equipment.item_type.replace('_', ' ') }}: {{ equipment.item_name.replace('_', ' ') }} - {% if equipment.item_number < 10 %}0{% endif %}{{ equipment.item_number }}
             | Assigned: {{ equipment.dateOut.strftime('%A, %B %d at %I:%M %p ') }}</p>
 
         {% endif %}

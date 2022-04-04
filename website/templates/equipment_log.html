@@ -11,10 +11,16 @@
 <li class="list-group-item">
 
     <div>
-      {{ data.item_name }} - {% if data.item_number < 10 %}0{% endif %}{{ data.item_number }}
+
+        {{ data.item_name.replace('_', ' ') }} - {% if data.item_number < 10 %}0{% endif %}{{ data.item_number }}
+
         <br />
+
         Time Out: {{ data.dateOut.strftime('%A, %B %d at %I:%M %p') }}
-        <br />Requestor:
+
+        <br />
+
+        Requestor:
 
         {% for user in users %}
 
@@ -27,14 +33,20 @@
         {% endfor %}
 
         | <a href="mailto: {{data.user_email}}?subject=ITSC Notice TEST&body=This is a notice from Mount St. Mary's University
-        Information Technology Student Center."><u>{{ data.user_email }}</u></a>
+        Information Technology Student Center.">
+
+            <u>{{ data.user_email }}</u>
+
+        </a>
 
         <br />Return Time: {{ data.returnDate.strftime('%A, %B %d, %Y at %I:%M %p') }}
 
-        {% if user.department == 'MANAGER' or user.department == 'ITSC' %}
+        {% if user.department == 'MANAGER' or user.department == 'ITSC' or user.department == 'LEAD' %}
 
         <button type="button" class="close" onClick="signIn({{ data.id }})">
-        <span aria-hidden="true">&times;</span>
+
+            <span aria-hidden="true">&times;</span>
+
         </button>
 
       {% endif %}
@@ -51,21 +63,27 @@
 
 <h3 align="center">*Available Equipment*</h3>
 
-
-
 {% for data in available %}
 
     <li class="list-group-item">
 
     <div>
-        {{ data.item_name }} - {% if data.item_number < 10 %}0{% endif %}{{ data.item_number }}<br />
-        Item ID: {{ data.id }} <br />
+        {{ data.item_name.replace('_', ' ') }} - {% if data.item_number < 10 %}0{% endif %}{{ data.item_number }}
+
+        <br />
+
+        Item ID: {{ data.id }}
+
+        <br />
+
         Time In: {{ data.dateIn.strftime('%A, %B %d, %Y at %I:%M %p') }}
 
-        {% if user.department == 'MANAGER' or user.department == 'ITSC' %}
+        {% if user.department == 'MANAGER' or user.department == 'ITSC' or user.department == 'LEAD' %}
 
         <button type="button" class="close" onClick="signOut({{ data.id }})">
-        <span aria-hidden="true">&times;</span>
+
+            <span aria-hidden="true">&times;</span>
+
         </button>
 
       {% endif %}
@@ -183,18 +201,25 @@
         </select>
 
         <br />
+
         <br />
 
         <div>
+
             <label>Select Return Data:</label>
-            <input type="datetime-local" id="event-date" name="event-date" min="2022-01-01T08:00" max="2022-05-13T22:00" required>
+
+            <input type="datetime-local" id="event-date" name="event-date" max="2022-05-13T22:00" required>
+
         </div>
 
         <br />
+
         <br />
 
         <div align="center">
+
             <button type="submit" class="btn btn-primary" onClick="">Check Out</button>
+
         </div>
 
     </div>
@@ -202,7 +227,9 @@
 </form>
 
 <br />
+
 <br />
+
 <br />
 
 {% endblock %}

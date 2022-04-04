@@ -99,4 +99,51 @@
 
 </form>
 
+<hr />
+
+{% for type in item_types %}
+
+<h2>{{ type }}s</h2>
+
+    {% for name in item_names %}
+
+      {% for item in full_inventory %}
+
+        {% if item.item_name == name and item.item_type == type %}
+
+          <p>{{ item.item_name.replace('_', ' ') }} - {% if item.item_number < 10 %}0{% endif %}{{ item.item_number }}</p>
+
+        {% endif %}
+
+      {% endfor %}
+
+    {% endfor %}
+
+{% endfor %}
+
+<hr />
+
+{% if min <= 3 %}
+
+  <h1 align="center">* LOW INVENTORY ALERTS *</h1>
+
+  <br />
+
+    {% for name in item_names %}
+
+      {% if item_counts[item_names.index(name)] <= 3 %}
+
+        <h2>*LOW COUNT: {{ name.replace('_', ' ') }} x{{ item_counts[item_names.index(name)] }}</h2>
+
+          <a href="mailto: {{ lead.email }}?subject=*ALERT*&body=The item count for {{ name }} is running low.">Notify Lead Manager</a>
+
+          <br /><br />
+
+      {% endif %}
+
+    {% endfor %}
+
+{% endif %}
+
+
 {% endblock %}

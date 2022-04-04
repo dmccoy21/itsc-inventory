@@ -7,6 +7,7 @@ function deleteTicket(ticketId) {
   });
 }
 
+
 function deleteUser(userId){
   fetch("/tech/view_users/delete-user", {
     method: 'POST',
@@ -15,6 +16,7 @@ function deleteUser(userId){
     window.location.href = "/tech/view_users";
   });
 }
+
 
 function signOut(itemId){
   fetch("/tech/equipment_log/sign-out", {
@@ -25,6 +27,7 @@ function signOut(itemId){
   });
 }
 
+
 function signIn(itemId){
   fetch("/tech/equipment_log/sign-in", {
     method: 'POST',
@@ -33,3 +36,9 @@ function signIn(itemId){
     window.location.href = "/tech/equipment_log";
   });
 }
+
+
+const today = new Date().toISOString().slice(0, 16);
+document.getElementsByName("event-date")[0].min = today;
+
+

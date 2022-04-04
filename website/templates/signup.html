@@ -1,12 +1,12 @@
 {% extends "base.html" %} {% block title %}Sign Up{% endblock %} {% block content %}
 
-<form method="POST">
+<form method="POST" xmlns="http://www.w3.org/1999/html">
 
   <h1 align="center">Sign Up</h1>
 
   <div class="form-group">
 
-    <label for="first_name">First Name:</label>
+    <label for="first_name"><span class="labels">First Name:</span></label>
 
     <input
       type="text"
@@ -20,7 +20,7 @@
 
   <div class="form-group">
 
-    <label for="last_name">Last Name:</label>
+    <label for="last_name"><span class="labels">Last Name:</span></label>
 
     <input
       type="text"
@@ -34,7 +34,7 @@
 
   <div class="form-group">
 
-    <label for="email">Email Address:</label>
+    <label for="email"><span class="labels">Email Address:</span></label>
 
     <input
       type="email"
@@ -48,7 +48,7 @@
 
   <div class="form-group">
 
-    <label for="password1">Password:</label>
+    <label for="password1"><span class="labels">Password:</span></label>
 
     <input
       type="password"
@@ -62,7 +62,7 @@
 
   <div class="form-group">
 
-    <label for="password2">Confirm Password:</label>
+    <label for="password2"><span class="labels">Confirm Password:</span></label>
 
     <input
       type="password"
@@ -76,7 +76,7 @@
 
   <div class="form-group">
 
-    Department: <select name="department">
+    <span class="labels">Department:</span> <select name="department">
 
       <option hidden="">Select Department</option>
 
@@ -113,6 +113,8 @@
       <option value="PHIL">PHIL</option>
 
       <option value="WCIV">WCIV</option>
+
+      <option value="LEAD">LEAD</option>
 
       <option value="MANAGER">MANAGER</option>
 
